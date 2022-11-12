@@ -6,12 +6,11 @@ var addProudctBtn= document.querySelector('.add-product');
 var UpdateProudctBtn= document.querySelector('.update-product');
 var tableBody=document.querySelector('#table-body');
 var searchInput=document.getElementById('searchinput');
-formProuduct=document.getElementById('form-Product');
+var  formProuduct=document.getElementById('form-Product');
 var textValidateName=document.getElementById('textValidateName')
 var textValidatePrice=document.getElementById('textValidatePrice')
 var textValidateCategory=document.getElementById('textValidateCategory')
 var textValidateDesc=document.getElementById('textValidateDesc')
-
 var productContainer;
 
 if (localStorage.getItem('my product') != null){
@@ -22,9 +21,8 @@ else{
     productContainer= [];
 }
 
-
 function addProudct(){
-    if (formValidate == true){
+   
         var product={
             name:productNameInput.value,
             price:productPriceInput.value,
@@ -40,10 +38,13 @@ function addProudct(){
            productPriceInput.classList.remove('is-valid');
            productCategoryInput.classList.remove('is-valid');
            productDescriptionInput.classList.remove('is-valid');
+        
+
     }
+  
+      
 
 
-}
 
 
 function clearForm(){
@@ -72,16 +73,27 @@ function display(productList){
 
 
 function searchProduct(searchTerm){
-    var searchResult=[];
-    for (var i=0; i<productContainer.length; i++){
-        if (productContainer[i].name.toLowerCase().includes(searchTerm.toLowerCase())){
-            console.log(searchResult);
-        searchResult.push(productContainer[i]);
-        
+
+    var cartoona=``;
+    for (var i=1; i<productContainer.length; i++){
+        if(productContainer[i].name.toLowerCase().includes(searchTerm.toLowerCase()))  {
+             cartoona+= `
+        <tr>
+        <td>${i}</td>
+        <td>${productContainer[i].name}</td>
+        <td>${productContainer[i].price}</td>
+        <td>${productContainer[i].category}</td>
+        <td>${productContainer[i].desc}</td>
+        <td><button class="update-product" onclick=setFormForUpdate(${i})> Update</button></td>
+        <td><button class="btn btn-outline-danger" onclick=deleteProduct(${i})> Delete</button></td>
+  </tr>`
         }
+       
     }
-    display(searchResult);
+    tableBody.innerHTML=cartoona;
+   
 }
+
  function deleteProduct(deletedindex){
     productContainer.splice(deletedindex,1);
     display(productContainer);
@@ -111,19 +123,16 @@ function setFormForUpdate(updateItem){
 
 
  }
- function formValidate(){
-    if (validateProductName && validateProductPrice  && validateProductCategory && validateProductDescription == true){
-        addProudct();
-   
-    }
- }
+
+
 
 //  ---------validation ---------------
 function validateProductName(){
  
     var regEx=/^[A-Z][a-z]{3,20}$/;
-   if ( regEx.test(productNameInput.value) == true){
+   if ( regEx.test(productNameInput.value) ){
     productNameInput.classList.replace('is-invalid', 'is-valid');
+    textValidateName.innerHTML='';
     return true;
    }
    else{
@@ -136,8 +145,9 @@ function validateProductName(){
 
 function validateProductPrice(){
     var regEx=/^[0-9]{1,}$/;
-   if ( regEx.test(productPriceInput.value) == true){
+   if ( regEx.test(productPriceInput.value)){
     productPriceInput.classList.replace('is-invalid', 'is-valid');
+    textValidatePrice.innerHTML='';
     return true;
    }
    else{
@@ -148,9 +158,10 @@ function validateProductPrice(){
    }
 }
 function validateProductCategory(){
-    var regEx=/[a-zA-Z]{5,30}$/;
-   if ( regEx.test(productCategoryInput.value) == true){
+    var regEx=/^[a-zA-Z]{5,30}$/;
+   if ( regEx.test(productCategoryInput.value)  ){
     productCategoryInput.classList.replace('is-invalid', 'is-valid');
+    textValidateCategory.innerHTML='';
     return true;
    }
    else{
@@ -161,9 +172,10 @@ function validateProductCategory(){
    }
 }
 function validateProductDescription(){
-    var regEx=/[a-zA-Z0-9]{5,90}$/;
-   if ( regEx.test(productDescriptionInput.value) == true){
+    var regEx=/^[a-zA-Z0-9]{5,90}$/;
+   if ( regEx.test(productDescriptionInput.value) ){
     productDescriptionInput.classList.replace('is-invalid', 'is-valid');
+    textValidateDesc.innerHTML='';
     return true;
    }
    else{
@@ -171,11 +183,18 @@ function validateProductDescription(){
     textValidateDesc.innerHTML='The text size must be no less than 5 characters and no more than 30 characters.';
     return false;
    }
+
 }
 
 
 //  -----------------events----------------
-addProudctBtn.addEventListener('click', addProudct);
+addProudctBtn.addEventListener('click', function(){
+
+     if (validateProductName() && validateProductPrice()  && validateProductCategory() && validateProductDescription() ){
+        addProudct();
+   
+    }
+});
 searchInput.addEventListener('input', function (){
     searchProduct(this.value)
 })
