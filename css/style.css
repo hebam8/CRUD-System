@@ -1,0 +1,22 @@
+h1, thead{
+   
+    color:rgb(5, 100, 100);
+    font-weight: 900;
+}
+label{
+    font-weight:500 ;
+}
+.add-product,.update-product{
+   
+    border: solid 2px rgb(5, 100, 100);
+    border-radius: 5px;
+    color: rgb(5, 100, 100);
+    background-color: #fff;
+    padding: 5px 10px;
+    font-weight: 600;
+    transition: .5s;
+}
+.add-product ,.update-product:hover{
+    background-color:rgb(5, 100, 100) ;
+    color: #fff;
+}
